@@ -12,30 +12,37 @@
 
 ### 项目搭建
 
-1. 模板创建
+[https://github.com/drivercraft/bare-test-template](https://github.com/drivercraft/bare-test-template)
 
-    ```bash
-    cargo install cargo-generate
-    cargo generate drivercraft/bare-test-template
-    ```
+点击 "Use this template" 按钮，创建一个新的仓库。
 
-2. 手动创建
+修改 `Cargo.toml` 文件:
 
-    [https://github.com/drivercraft/bare-test-template](https://github.com/drivercraft/bare-test-template)
+```toml
+[package]
+edition = "2024"
+name = "project-name"
+version = "0.1.0"
+```
 
-    点击 "Use this template" 按钮，创建一个新的仓库。
-
-    修改 `Cargo.toml` 文件，添加以下内容：
-
-    ```toml
-    [package]
-    edition = "2024"
-    name = "{{ project-name }}"
-    version = "0.1.0"
-    ```
-
-    {{ project-name }} 替换为你的项目名称。
+`project-name` 替换为你的项目名称。
 
 `src/lib.rs` 中构建你的驱动程序
 
 `tests/test.rs` 中编写测试代码。
+
+### 运行测试
+
+安装 `ostool`
+
+```bash
+cargo install ostool
+```
+
+运行测试
+
+```bash
+cargo test --package project-name --test test -- tests --show-output
+# 带uboot的开发板测试
+cargo test --package project-name --test test -- tests --show-output --uboot 
+```
