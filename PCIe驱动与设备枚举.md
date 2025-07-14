@@ -8,6 +8,8 @@
 
 ## 1. PCIe简介
 
+[PCIe 5.0 文档](https://picture.iczhiku.com/resource/eetop/SYkDTqhOLhpUTnMx.pdf)
+
 ### 1.1 什么是PCIe
 
 - PCIe是一种高速串行总线标准
@@ -15,14 +17,44 @@
 - 采用点对点连接，支持全双工通信
 - 具有更高的带宽和更好的扩展性
 
-### 1.2 PCIe的主要特点
+### 1.2 PCIe整体框图
 
-- **串行传输**：相比PCI的并行传输，减少了信号干扰
-- **分层架构**：物理层、数据链路层、事务层
-- **热插拔支持**：支持设备的热插拔操作
-- **向下兼容**：软件层面兼容PCI
+PCIe的架构主要由五个部分组成：Root Complex，PCIe Bus，Endpoint，Port and Bridge，Switch
 
----
+![PCIe整体框图](imges/PCIe总体框图.png)
+
+#### BDF(Bus Number, Device Number, Function Number)
+
+PCIe上所有的设备，无论是Type 0还是Type 1，在系统启动的时候，都会被分配一个唯一的地址，它有三个部分组成：
+
+Bus Number：8 bits，也就是最多256条总线
+Device Number：5 bits，也就是最多32个设备
+Function Number：3 bits，也就是最多8个功能
+
+```sh
+lspci -t -v
+```
+
+```bash
+-[0000:00]-+-00.0  Intel Corporation Device 9b43
+           +-01.0-[01]--+-00.0  NVIDIA Corporation GK208B [GeForce GT 730]
+           |            \-00.1  NVIDIA Corporation GK208 HDMI/DP Audio Controller
+           +-02.0  Intel Corporation CometLake-S GT2 [UHD Graphics 630]
+           +-08.0  Intel Corporation Xeon E3-1200 v5/v6 / E3-1500 v5 / 6th/7th/8th Gen Core Processor Gaussian Mixture Model
+           +-14.0  Intel Corporation Comet Lake PCH-V USB Controller
+           +-14.2  Intel Corporation Comet Lake PCH-V Thermal Subsystem
+           +-16.0  Intel Corporation Comet Lake PCH-V HECI Controller
+           +-17.0  Intel Corporation 400 Series Chipset Family SATA AHCI Controller
+           +-1b.0-[02]----00.0  Yangtze Memory Technologies Co.,Ltd Device 0071
+           +-1c.0-[03]----00.0  Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller
+           +-1d.0-[04-05]----00.0-[05]--
+           +-1f.0  Intel Corporation B460 Chipset LPC/eSPI Controller
+           +-1f.2  Intel Corporation Memory controller
+           +-1f.3  Intel Corporation Comet Lake PCH-V cAVS
+           \-1f.4  Intel Corporation Comet Lake PCH-V SMBus Host Controller
+```
+
+Intel Corporation Comet Lake PCH-V USB Controller 的 BDF 是：0000:14.0
 
 ## 2. PCIe配置空间
 
