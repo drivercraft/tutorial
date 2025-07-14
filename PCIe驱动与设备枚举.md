@@ -72,53 +72,24 @@ PCIe配置空间是用于存储设备配置信息的内存区域，每个PCIe设
 
 ![common config header](imges/CommonConfigurationSpaceHeader.png)
 
-### 2.3 重要寄存器详解
-
-#### 2.3.1 Base Address Registers (BARs)
-
-- **作用**：定义设备的内存或I/O地址空间
-- **位置**：0x10-0x27（6个BAR寄存器）
-- **类型**：
-  - 内存BAR：用于内存映射I/O
-  - I/O BAR：用于端口映射I/O
-
-#### 2.3.2 Capabilities Pointer
-
-- **作用**：指向第一个能力结构的偏移地址
-- **格式**：链表结构，每个能力包含下一个能力的指针
-
 ### 2.4 配置空间访问方法
 
-1. **端口访问**：使用0xCF8和0xCFC端口
-2. **内存映射访问**：通过MMCONFIG机制
+1. **端口访问**
+2. **内存映射访问**
 3. **ECAM（Enhanced Configuration Access Mechanism）**
+![ECAM结构](imges/ECAM.png)
 
----
+如果某个设备的BDF是`46:00.1`，ECAM基址是`0xE0000000`，那么其配置空间起始地址就是：`0xE0000000 + (0x46 << 20) | (0x00 << 15) | (0x01 << 12) = 0xE46001000`。
 
-## 3. PCIe地址空间
+### Type 0设备
 
-### 3.1 地址空间类型
+![Type 0设备配置空间](imges/pci-config-type0.png)
 
-#### 3.1.1 内存地址空间
+![Bar](imges/pci-bar.png)
 
-- **32位内存空间**：0x00000000 - 0xFFFFFFFF
-- **64位内存空间**：支持64位地址
-- **预取特性**：可标记为可预取或不可预取
+### Type 1设备
 
-#### 3.1.2 I/O地址空间
-
-- **大小**：16位地址空间（0x0000-0xFFFF）
-- **用途**：传统I/O端口访问
-- **限制**：现代设备较少使用
-
-#### 3.1.3 配置地址空间
-
-- **每个设备**：4KB配置空间
-- **访问方式**：通过配置事务
-
-### 3.2 内存映射示例
-
----
+![Type 1设备配置空间](imges/pci-config-type1.png)
 
 ## 4. PCIe深度优先遍历
 
@@ -126,30 +97,15 @@ PCIe配置空间是用于存储设备配置信息的内存区域，每个PCIe设
 
 ### 4.2 总线编号机制
 
-- **主总线号**：上游总线号
-- **次总线号**：下游总线号
-- **从属总线号**：子树中的最大总线号
+- Primary Bus Number（Pri）：这个Bridge所在的Bus Number，也就是它的上游连接的Bus Number
+- Secondary Bus Number（Sec）：这个Bridge所连接的下一个Bridge的Bus Number
+- Subordinate Bus Number（Sub）：这个Bridge所连接的下游所有的Bus的最大的Bus Number
 
 ### 4.3 深度优先遍历算法
 
-#### 4.3.1 遍历伪代码
-
-```
-function enumerate_pci_bus(bus_number):
-    for device = 0 to 31:
-        if device_exists(bus_number, device):
-            for function = 0 to 7:
-                if function_exists(bus_number, device, function):
-                    process_device(bus_number, device, function)
-                    
-                    if is_bridge(bus_number, device, function):
-                        secondary_bus = get_secondary_bus(bus_number, device, function)
-                        enumerate_pci_bus(secondary_bus)  // 递归调用
-```
-
-#### 4.3.2 实现示例
-
 ### 4.4 遍历过程详解
+
+![pci-enum](imges/pci-enum.png)
 
 #### 4.4.1 遍历步骤
 
@@ -161,6 +117,4 @@ function enumerate_pci_bus(bus_number):
 
 #### 4.4.2 设备识别流程
 
-读取Vendor ID → 检查是否为0xFFFF → 存在则处理设备 → 检查Header Type → 
-如果是桥设备则递归遍历子总线
-
+读取Vendor ID → 检查是否为0xFFFF → 存在则处理设备 → 检查Header Type → 如果是桥设备则递归遍历子总线
