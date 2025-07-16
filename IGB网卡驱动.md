@@ -22,4 +22,18 @@ IGB网卡架构:
 
 ![IGB网卡架构](imges/82576-block.png)
 
+### MAC(Media Access Control)
 
+### PHY(Physical Layer)
+
+### MII(Media Independent Interface)
+
+![MII接口](imges/mii.png)
+
+- 发送数据接口
+
+- 接收数据接口
+
+- MDIO：配置PHY芯片状态、读取寄存器、获取LINK状态等操作
+
+RMII、GMII、RGMII、SGMII等都是MII的变种，主要区别在于数据传输速率和引脚数量。
