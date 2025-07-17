@@ -49,3 +49,15 @@ RMII、GMII、RGMII、SGMII等都是MII的变种，主要区别在于数据传�
 PCIe 枚举
 
 手册阅读、寄存器定义
+
+MAC定义
+
+PHY定义
+
+PHY寄存器读写
+
+### 接收数据
+
+Ring
+
+Descriptor
