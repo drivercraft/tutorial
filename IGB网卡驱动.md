@@ -37,3 +37,15 @@ IGB网卡架构:
 - MDIO：配置PHY芯片状态、读取寄存器、获取LINK状态等操作
 
 RMII、GMII、RGMII、SGMII等都是MII的变种，主要区别在于数据传输速率和引脚数量。
+
+## 驱动分析
+
+### OSAL 操作系统抽象层
+
+[trait-ffi](https://crates.io/crates/trait-ffi) 使用`trait`生成和安全使用外部函数。
+
+### 驱动初始化
+
+PCIe 枚举
+
+手册阅读、寄存器定义
