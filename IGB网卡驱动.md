@@ -56,8 +56,26 @@ PHY定义
 
 PHY寄存器读写
 
-### 接收数据
+### Smoltcp
+
+网络栈验证
+
+### Request/Response 模型
+
+### 收发数据
 
 Ring
 
+- Head
+
+- Tail
+
 Descriptor
+
+- Read
+
+- Write-Back
+
+- Buffer
+
+`Reqeust` 生命周期
